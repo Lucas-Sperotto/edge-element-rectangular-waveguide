@@ -8,8 +8,8 @@ from postprocess import plot_modes_tricontourf
 
 
 # === Parâmetros do guia de onda ===
-a = 0.01  # largura (m)
-b = 0.005  # altura (m)
+a = 1.0  # largura (m)
+b = 0.5  # altura (m)
 filename = "rect_edge"
 num_modes = 24
 
@@ -49,9 +49,10 @@ if __name__ == "__main__":
     print("Resolvendo modos...")
     kc, modos, lambdas, edge_dict = solve_waveguide_modes(points, triangles, num_modes=num_modes, sigma=0)
     kc_a = kc * a
-    print("\n=== Kc_a (admensional) ===")
+    print("\n=== kc·a (adimensional) — apenas valores positivos ===")
     for i, f in enumerate(kc_a):
-        print(f"Modo {i+1}: {f/1e9:.4f} ")
+        #if f > 1e-12:
+        print(f"Modo {i+1:2d}: {f:.4e}")
 
 modos_validos = []
 kc_a_validos = []

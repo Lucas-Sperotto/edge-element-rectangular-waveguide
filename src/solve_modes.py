@@ -42,7 +42,7 @@ def apply_dirichlet_boundary(K, M, edge_dict, triangles, points=None, plot=False
 
 
 
-def solve_waveguide_modes(points, triangles, num_modes=6, sigma=1e-3):
+def solve_waveguide_modes(points, triangles, num_modes=6, sigma=None):
     """
     Resolve os modos do guia de onda (TE ou TM) com elementos de aresta.
     
@@ -87,7 +87,7 @@ def solve_waveguide_modes(points, triangles, num_modes=6, sigma=1e-3):
     print(f"Número de condição (SVD) de K: {cond_K:.2e}")
     print(f"Número de condição (SVD) de M: {cond_M:.2e}")
     print("Resolvendo problema de autovalores...")
-    vals, vecs = eigsh(K, k=60, M=M, sigma=sigma, which='LM')
+    vals, vecs = eigsh(K, k=num_modes, M=M, sigma=sigma, which='LM')
     vals = np.real(vals)
 
     kc = np.sqrt(np.clip(vals, 0, None))
