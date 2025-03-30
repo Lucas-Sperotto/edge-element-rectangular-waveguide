@@ -38,7 +38,7 @@ def apply_dirichlet_boundary(K, M, edge_dict, triangles, points=None, plot=False
         M[:, idx] = 0
         M[idx, idx] = 1.0
 
-    return K.tocsr(), M.tocsr()
+    return K, M
 
 
 
@@ -71,6 +71,9 @@ def solve_waveguide_modes(points, triangles, num_modes=6, sigma=1e-3):
     print("Montando matrizes K e M com elementos de aresta...")
     K, M, edge_dict = assemble_edge_matrices(points, triangles)
     K, M = apply_dirichlet_boundary(K, M, edge_dict, triangles, points=points, plot=True)
+    
+   # K = K.tocsr()
+   # M = M.tocsr()
     check_zero_rows_cols(K, "K")
     check_zero_rows_cols(M, "M")
     from numpy.linalg import svd
@@ -84,7 +87,7 @@ def solve_waveguide_modes(points, triangles, num_modes=6, sigma=1e-3):
     print(f"Número de condição (SVD) de K: {cond_K:.2e}")
     print(f"Número de condição (SVD) de M: {cond_M:.2e}")
     print("Resolvendo problema de autovalores...")
-    vals, vecs = eigsh(K, k=60, M=M, sigma=sigma, which='SM')
+    vals, vecs = eigsh(K, k=60, M=M, sigma=sigma, which='LM')
     vals = np.real(vals)
 
     kc = np.sqrt(np.clip(vals, 0, None))
